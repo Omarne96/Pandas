@@ -72,6 +72,18 @@ df.sort_values("Name",ascending=True)         ## This will sort names From A to 
 df.sort_values("Name",ascending=False)        ## This will sort names From Z to A
 df.sort_values(['Name','HP'],ascending=[1,0]) ## This will sort names from a to z and hp from the last to first
 
+df.isnull()                                   ## Will gives you if you have Empty cases or not (NaN)
+df.notnull()                                  ## Will gives you if you have Full cases or not ~(NaN)
+df.isnull().sum()                             ## This will gives you number of missing values in data file
+df[df['Type 2'].isnull()]                     ## This will gives you the Nan values in Type 2
+
+df.dropna(how='any')                          ## You will delet off of you empty rows
+df.dropna(how='all')                          ## You will delet rows wich are all columns are NaN
+df.dropna(subset=['Type 2'], how='any')       ## This will delet a row if 'Type 2' is NaN
+
+
+
+
 
 ''' --------------------------------------------------------------------------------------'''
 
