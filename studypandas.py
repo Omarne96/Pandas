@@ -1,12 +1,19 @@
+''' *-*-*-*-*-*-* NOTE: *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* 
+|  Before you Study Pandas framework you have to know Python Basics and Oriented object programing |
+*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+'''
 
 
+              ################################################################
+            ## *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*##
+           ## */ ----------------------------------------------------------- \*##
+           ## *| Here you are going to learn Pandas Framework For Beginners  |*##
+           ## *| -------------=> https://github.com/Omarne96  <=------------ |*##
+           ## *| ----------------=>  Instagram : Omar_ne16 <=--------------- |*##
+           ## *\ ----------------------------------------------------------- /*##
+            ## *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*##      
+              ################################################################
 
-      ###############################################################
-      ##                                                           ##
-      ## Here you are going to learn Pandas Framework For Beginners##
-      ##               https://github.com/Omarne96                 ##
-      ##                  Instagram : Omar_ne16                    ##
-      ###############################################################
 
 '''
         First of all you have to install Pandas framework
@@ -18,6 +25,11 @@
 ## Then import the pandas library
 import pandas as pd
 import re                                           ## this RE is regex you will learn it below
+
+
+
+## version=pd.show_versions()                       ## If you want to know the instaled tools versions
+## Or you can use pd.__version__  which gives you the same details
 
 
 ## Now, read the csv file with read_csv() fucntion:
@@ -60,27 +72,61 @@ df.iloc[0:4]                            ## will gives you n rows
 #############################
 df.iloc[2,1]                            ## will gives you a spesicif position
 df.loc[df['Type 1'] == "Fire"]          ## will gives you all rows equals Fire type in your data.
+df.iloc[4,df.columns.get_loc('Attack')] ## Will gives you the Value of position you selected
 
+
+
+                            
 
 ## Sorting/Describing:
-#####################
+######################
+
 df.describe()                                 ## Give you details of your numerical columns 
 df.Attack.describe()                          ## Give you details of Attack row
-df.Attack.value_counts()                      ## Give you number of all attacks you have
+##df.info()
+##df.info(memory_usage="deep")                ## This will gives you details about data and memory usage
+df.memory_usage(deep=True)                    ## This will gives you every colums memory usage in bytes, use deep=True to get the real numbers
+
+
+df.Attack.value_counts()                      ## Give you the occurrence number of all attacks values
 
 df.sort_values("Name",ascending=True)         ## This will sort names From A to Z
 df.sort_values("Name",ascending=False)        ## This will sort names From Z to A
 df.sort_values(['Name','HP'],ascending=[1,0]) ## This will sort names from a to z and hp from the last to first
+
+df['Type 2'].unique()                         ## This ill gives you only the unique values of type 2 column
+
+
+## THE Missing values :
+#######################
 
 df.isnull()                                   ## Will gives you if you have Empty cases or not (NaN)
 df.notnull()                                  ## Will gives you if you have Full cases or not ~(NaN)
 df.isnull().sum()                             ## This will gives you number of missing values in data file
 df[df['Type 2'].isnull()]                     ## This will gives you the Nan values in Type 2
 
-df.dropna(how='any')                          ## You will delet off of you empty rows
+
+''' NOTE :The drope function has inplace parameter is False by default which means not deleted completely 
+'''
+df.dropna(how='any')                          ## You will delet any rows has NaN value
 df.dropna(how='all')                          ## You will delet rows wich are all columns are NaN
 df.dropna(subset=['Type 2'], how='any')       ## This will delet a row if 'Type 2' is NaN
+df['Type 2'].value_counts(dropna=False)       ## Occurrence number for all values in Type 2 including NaN
 
+df['Type 2'].fillna(value="okok",inplace=True)## Fill all NanN in Type 2 with 'okok'   ==> (replace it)
+
+        #########################################################################
+        ## ------------------------------------------------------------------- ##                    
+        ## ------------  Updates on The New Vesion of Pandas  ---------------  ##
+        ## --------------------------------------------------------------------##
+        #########################################################################
+
+## You can use isna() and notna() functions instide of isnull() and notnull() 
+
+##Then you can use the NEW Method to drop rows or columns:
+
+df.drop(index=[0,1,2])                         ## This will Drop row 0 and 1 and 2
+df.drop(columns=['HP','Type 2'])               ## This will Drop HP nad Type 2 columns
 
 
 
@@ -106,12 +152,12 @@ df=df[cols[0:4]+[cols[-1]]+cols[4:12]]         ## This reorder it as you want
 # Save your file:
 #################
 
-##df.to_csv("modified.csv",index=False)
+##df.to_csv("modified.csv",index=False) :
 df.to_csv("modified.txt",index=False,sep="\t")
 
             #############################################################
             ##   to Save as exel file you have to install openpyxl :   ##
-            ##   pip install openpyxl                                  ##
+            ##                  pip install openpyxl                   ##
             #############################################################
 
 ## Save it as excel file:
@@ -149,7 +195,15 @@ sere=df.loc[df["Type 1"].str.contains("fire|grass",flags=re.I,regex=True)]
 sere=df.loc[df["Name"].str.contains("^pi[a-z]*",flags=re.I,regex=True)]
 
 ##Remove U and change a to s in Name column :
-ok.Name.str.replace('u','').str.replace('a','s') 
+sere.Name.str.replace('u','').str.replace('a','s') 
+
+
+
+## Rename :
+###########
+''' inplace=True is important to work'''
+dataf=pd.read_csv("data_file.csv")
+dataf.rename({'Type 1':'T1','Type 2':'T2'},axis="columns",inplace=True)
 
 
 
@@ -175,7 +229,7 @@ ans=ok.groupby(['Type 1']).mean().sort_values('Attack',ascending=False)
 
 
 ans2=df.groupby('Name').Attack.agg(['min','max','count','mean']) 
-          ##  agg(['','']) you can use man functions 
+           ##  agg(['','']) you can use man functions 
 
 
 
@@ -203,9 +257,8 @@ for df in pd.read_csv('data_file.csv',chunksize=3):
 
 
 
-
 ## Change the data type:
-#########################
+########################
 
 df=pd.read_csv('data_file.csv')
 df['Attack']=df.Attack.astype(float)
@@ -218,16 +271,64 @@ df=pd.read_csv('data_file.csv',dtype={'Attack':float})
 
 
 
-
-
-
-
-
-
-
-
    
 
+'''----------------------------------------------------------------------------------------------------------------------------------'''
+
+
+
+      #############################################################################
+      ## IMPORTANT NOTE :------------------------------------------------------- ##
+      ## | To Make your pandas DataFrame smaller and faster : Use Categories    |##
+      ##  ---------------------------------------------------------------------- ##
+      #############################################################################
+
+
+
+## Categories (Object): 
+########################
+
+## ~~ First of all check the size of your data frame and size of each column ~~ ##
+test=pd.read_csv('data_file.csv')
+
+#test.info(memory_usage="deep")                        ## The date original size is 128.7 KB
+before=test.memory_usage(deep=True)                    ## For example the Name columns have 30299 Bytes here
+
+## ~~ Lets change the Name column to category and check again ~~ ##
+test["Name"]=test['Name'].astype('category')           ## This will change type of Name to categotry
+test["Type 1"]=test['Type 1'].astype('category')
+test["Type 2"]=test['Type 2'].astype('category')
+test["HP"]=test.HP.astype('category')
+test["Attack"]=test.Attack.astype('category')
+test["Defense"]=test.Defense.astype('category')
+test["Sp. Atk"]=test['Sp. Atk'].astype('category')
+test["Sp. Def"]=test['Sp. Def'].astype('category')
+test["Generation"]=test.Generation.astype('category')
+test["Legendary"]=test.Legendary.astype('category')
+
+
+#test.info(memory_usage="deep")                 ## Now the data size will be 96.9 KB
+after=test.memory_usage(deep=True)              ## Now the name column becomes 27408 bytes, difference is 2891 bytes
+
+test.Name.cat.codes.head()                      ## This will represent the names series as an integers (with codes)
+
+''' Explain : if you use test.memory_usage(deep=True) you will see decreased of size in all columns
+              except Names columns, the name column size will increase because of the changing to object column (integer numbers) 
+              ( all strings column name change to object columns(integers)   ) and that logically if the size increased.
+              
+              But if you  use test.info(memory_usage="deep")  you will see the total size of data 
+              decreased from 128.7 KB to 96.6 KB and that's the point
+'''
+
+    ###############################################################################################
+    ## --- IMPORTANT NOTE 2 :------------------------------------------------------------------- ##
+    ##| Categories do not just save the size of file, its make you faster in compilation too :D |##
+    ## ----------------------------------------------------------------------------------------- ##
+    ###############################################################################################
+
+
+
+'''----------------------------------------------------------------------------------------------------------------------------------'''
 
 
 
@@ -253,28 +354,92 @@ df=pd.read_csv('data_file.csv',dtype={'Attack':float})
 
 
 
+###########################################################################################
+## ------------------------------------------------------------------------------------- ##
+##| *-*-*-*-*-*-*-*-*-*-*-*-*- : Things i did not undertand : -*-*-*-*-*-*-*-*-*-*-*-*-*|##
+##| *                                                                                  *|##
+##| *                                                                                  *|##
+##| *                                                                                  *|##
+##| *                                                                                  *|##
+##| *                                                                                  *|##
+##| *                                                                                  *|##
+##| *                                                                                  *|##
+##| *                                                                                  *|##
+##| *-*-*-.*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*|##            
+## ------------------------------------------------------------------------------------- ##
+###########################################################################################
 
 
 
 
 
+            ##################################################################
+            ##  ----------------------------------------------------------  ##
+            ## | ./--------------- : For Any Questions : --------------\. | ##
+            ## | |-------- https://github.com/Omarne96/Pandas ----------| | ##
+            ## | .\ ------------- Instagram : Omar_ne16 ---------------/. | ##
+            ##  ----------------------------------------------------------  ##
+            ##################################################################
 
-
-
+                           ##             Enjoy              ##          
 
             #################################################################
-            ## ----------------------------------------------------------- ##
-            ##                     For Any Questions :                     ##
-            ##            https://github.com/Omarne96/Pandas               ##
-            ##                   Instagram : Omar_ne16                     ##
-            ## ----------------------------------------------------------- ##
+            ##  ----------------- : Database Source : -------------------  ##
+            ## |          link of the database we are woring on          | ##
+            ## |          https://www.kaggle.com/abcsds/pokemon          | ##
+            ##  ---------------------------------------------------------  ##
             #################################################################
 
-                            ##            Enjoy              ##          
 
-            #################################################################
-            ## ------------------- Database Source : ----------------------##
-            ##            link of the database we are woring on            ##
-            ##            https://www.kaggle.com/abcsds/pokemon            ##
-            ## ----------------------------------------------------------- ##
-            #################################################################
+
+
+
+
+
+
+
+
+
+
+##################################################
+## This is the result of changing to category:  ##
+##################################################
+'''
+###################################
+## Before Changing to category : ##
+###################################
+Index            64
+#              6400
+Name          30299
+Type 1        27408
+Type 2        22066
+HP             6400
+Attack         6400
+Defense        6400
+Sp. Atk        6400
+Sp. Def        6400
+Speed          6400
+Generation     6400
+Legendary       800
+dtype: int64
+#################################
+## After Changing to category :##
+#################################
+Index            64
+#              6400
+Name          56485
+Type 1         1802
+Type 2         1802
+HP             3600
+Attack         5784
+Defense        5720
+Sp. Atk        5736
+Sp. Def        3584
+Speed          6400
+Generation      976
+Legendary       882
+
+dtype: int64
+[Finished in 6.4s]
+
+'''            
